@@ -8,8 +8,8 @@ pipeline {
     stage('Build') {
       steps {
         
-        sh 'docker build -t video-streaming -f video-streaming/Dockerfile .'
-        sh 'docker build -t history -f history/Dockerfile .'
+        sh 'docker build -t video-streaming -f video-streaming/Dockerfile video-streaming/.'
+        sh 'docker build -t history -f history/Dockerfile history/.'
         
       }
     }
