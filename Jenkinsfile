@@ -26,7 +26,7 @@ pipeline {
       steps {
         // Run SonarQube analysis
         withSonarQubeEnv(installationName: 'sonar') {
-          sh 'sonar-scanner'
+          sh '/opt/homebrew/bin/sonar-scanner'
         }
       }
     }
