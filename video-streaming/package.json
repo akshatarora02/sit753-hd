@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "start:dev": "nodemon --legacy-watch ./src/index.js",
-    "test": "mocha src/streaming.test.js --exit"
+    "test": "usr/local/bin/node mocha src/streaming.test.js --exit"
   },
   "keywords": [],
   "author": "",
