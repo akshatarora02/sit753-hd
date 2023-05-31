@@ -1,11 +1,15 @@
 pipeline {
   agent any
+  tools {
+    nodejs '20.2.0'
+  }
   
   stages {
     stage('Build') {
       steps {
         
-        sh 'docker compose up --build -d'
+        sh 'docker build -t video-streaming -f video-streaming/Dockerfile .'
+        sh 'docker build -t history -f history/Dockerfile .'
         
       }
     }
