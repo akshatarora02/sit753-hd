@@ -14,9 +14,11 @@ pipeline {
     stage('Test') {
       steps {
         // Running automated tests using mocha and supertest
-        sh 'cd video-streaming/'
-        sh 'npm install'
-        sh 'npm test'
+        sh '''
+                cd video-streaming/
+                npm install
+                npm test
+            '''
       }
     }
     
