@@ -11,5 +11,4 @@
 # yum install python3-pip
 # pip3 install docker-compose
 
-whoami 
-which docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
