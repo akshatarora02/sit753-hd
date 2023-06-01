@@ -1,7 +1,8 @@
 pipeline {
   agent any
   environment {
-        dockerImageUri = 'akshatarora/video-streaming' // Docker image URI
+        DATADOG_API_KEY = credentials('datadog-api-key')
+        RECIPIENT_EMAIL = 'akshatarora028@gmail.com'
     }
 
   stages {
@@ -50,7 +51,41 @@ pipeline {
                 }
             }
         }
-
+    stage('Install and Start Datadog Agent') {
+            steps {
+                sh 'DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${env.DATADOG_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
+                sh 'sudo systemctl start datadog-agent'
+            }
+        }
+    stage('Create or Update Datadog Monitor') {
+            steps {
+                script {
+                    def monitorPayload = [
+                        'type': 'metric alert',
+                        'query': 'avg(last_5m):avg:system.load.1{host:ip-172-31-12-149.ap-southeast-2.compute.internal} by {host} > 0.1',
+                        'name': 'High CPU Usage',
+                        'message': 'High CPU usage detected on instance',
+                        'tags': ['env:production'],
+                        'options': [
+                            'notify_audit': false,
+                            'notify_no_data': false,
+                            'timeout_h': 0,
+                            'include_tags': true,
+                            'require_full_window': false,
+                            'notify_email': [
+                                'addresses': [env.RECIPIENT_EMAIL]
+                            ]
+                        ]
+                    ]
+                    
+                    // Send the monitor payload to Datadog API to create or update the monitor
+                    sh """
+                        curl -X POST "https://api.datadoghq.com/api/v1/monitor?api_key=${env.DATADOG_API_KEY}" \\
+                        -H "Content-Type: application/json" \\
+                        -d '${monitorPayload}'
+                    """
+                }
+            }
+        }
+    }
 }
-}
-
