@@ -5,9 +5,11 @@ pipeline {
     stage('Build') {
       steps {
         
-        sh 'docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/video-streaming -f video-streaming/Dockerfile video-streaming/. '
-        sh 'docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/history -f history/Dockerfile history/. '
-        
+        sh '''
+            docker buildx create --use
+            docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/video-streaming -f video-streaming/Dockerfile video-streaming/. 
+            docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/history -f history/Dockerfile history/. '
+            '''
       }
     }
     
