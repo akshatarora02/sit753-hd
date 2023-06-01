@@ -50,14 +50,14 @@ pipeline {
                 }
             }
         }
-    stage('Install and Start Datadog Agent') {
-            steps {
-                withCredentials([string(credentialsId: 'datadog-api-key', variable: 'DATADOG_API_KEY')]) {
-                sh 'DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${DATADOG_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
-                }
-                sh 'sudo systemctl start datadog-agent'
-            }
-        }
+    // stage('Install and Start Datadog Agent') {
+    //         steps {
+    //             withCredentials([string(credentialsId: 'datadog-api-key', variable: 'DATADOG_API_KEY')]) {
+    //             sh 'DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${DATADOG_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
+    //             }
+    //             sh 'sudo systemctl start datadog-agent'
+    //         }
+    //     }
     stage('Create or Update Datadog Monitor') {
             steps {
                 script {
