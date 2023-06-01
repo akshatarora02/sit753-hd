@@ -8,5 +8,8 @@
 # newgrp docker
 
 
-yum install python3-pip
-pip3 install docker-compose
+# yum install python3-pip
+# pip3 install docker-compose
+
+whoami 
+which docker-compose
