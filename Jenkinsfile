@@ -53,7 +53,7 @@ pipeline {
     stage('Install and Start Datadog Agent') {
             steps {
                 withCredentials([string(credentialsId: 'datadog-api-key', variable: 'DATADOG_API_KEY')]) {
-                sh 'DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${env.DATADOG_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
+                sh 'DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=${DATADOG_API_KEY} DD_SITE="datadoghq.com" bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"'
                 }
                 sh 'sudo systemctl start datadog-agent'
             }
@@ -82,7 +82,7 @@ pipeline {
                     // Send the monitor payload to Datadog API to create or update the monitor
                     withCredentials([string(credentialsId: 'datadog-api-key', variable: 'DATADOG_API_KEY')]) {
                     sh """
-                        curl -X POST "https://api.datadoghq.com/api/v1/monitor?api_key=${env.DATADOG_API_KEY}" \\
+                        curl -X POST "https://api.datadoghq.com/api/v1/monitor?api_key=${DATADOG_API_KEY}" \\
                         -H "Content-Type: application/json" \\
                         -d '${monitorPayload}'
                     """
