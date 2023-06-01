@@ -5,8 +5,8 @@ pipeline {
     stage('Build') {
       steps {
         
-        sh 'docker build -t video-streaming -f video-streaming/Dockerfile video-streaming/.'
-        sh 'docker build -t history -f history/Dockerfile history/.'
+        sh 'docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/video-streaming -f video-streaming/Dockerfile video-streaming/. '
+        sh 'docker buildx build --push --platform linux/amd64,linux/arm64 -t akshatarora/history -f history/Dockerfile history/. '
         
       }
     }
@@ -30,12 +30,22 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Deploy to Development') {
       steps {
         
         sh 'docker compose up -d'
         
       }
     }
+    stage('Deploy to Production') {
+            steps {
+                withAWS(credentials: 'd7b824d2-580f-4ff2-9f43-b0d6d7b68e41', region: 'us-west-2') {
+                    sh 'aws deploy create-deployment --application-name video-streaming --deployment-group-name sit753-videostreaming --revision revisionType=AppSpecContent,content={ "docker": { "imageUri": "akshatarora/video-streaming" } }'
+                    sh 'aws deploy create-deployment --application-name history --deployment-group-name history --revision revisionType=AppSpecContent,content={ "docker": { "imageUri": "akshatarora/history" } }'
+                    // Add more deployment commands for additional Docker images as needed
+                }
+            }
+        }
+
 }
 }
