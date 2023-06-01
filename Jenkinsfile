@@ -45,7 +45,7 @@ pipeline {
     stage('Deploy to Production') {
             steps {
                 withAWS(credentials: 'd7b824d2-580f-4ff2-9f43-b0d6d7b68e41', region: 'ap-southeast-2') {
-                    sh "/opt/homebrew/bin/aws deploy create-deployment --application-name video-streaming --deployment-group-name sit753-videostreaming --revision revisionType=AppSpecContent,content='{\"docker\": {\"imageUri\": \"${dockerImageUri}\"}}'"
+                    sh "/opt/homebrew/bin/aws deploy create-deployment --application-name video-streaming --deployment-group-name sit753-videostreaming --revision revisionType=Docker,imageName=akshatarora/video-streaming:latest"
                     sh "/opt/homebrew/bin/aws deploy create-deployment --application-name history --deployment-group-name history --revision revisionType=AppSpecContent,content='{\"docker\": {\"imageUri\": \"${dockerImageUri}\"}}'"
                     // Add more deployment commands for additional Docker images as needed
                 }

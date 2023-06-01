@@ -24,7 +24,7 @@ services:
       - my-network
 
   video-streaming:
-    image: video-streaming
+    image: akshatarora/video-streaming
     build: 
       context: ./video-streaming
       dockerfile: Dockerfile
@@ -46,7 +46,7 @@ services:
       - my-network
 
   history:
-    image: history
+    image: akshatarora/history
     build: 
       context: ./history
       dockerfile: Dockerfile
